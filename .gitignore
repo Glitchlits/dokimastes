@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.model-audit/
+audit-results.json
+architect-inbox/
+architect-outbox/
+*.output
