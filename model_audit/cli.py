@@ -114,6 +114,26 @@ def cmd_review(args):
             print(personal_review(review, profile))
 
 
+def cmd_fork(args):
+    from model_audit.providers import detect_provider
+    from model_audit.runner import run_fork
+    from model_audit.profile import load_profile
+    from model_audit.report import fork_summary
+
+    profile = load_profile(args.profile)
+    if not profile:
+        print(f"Profile not found: {args.profile}")
+        print("Run 'python -m model_audit intake' to create one.")
+        sys.exit(1)
+
+    system = _load_system_prompt(args.prompt)
+    provider_name, provider = detect_provider(args.model)
+    entity_name = profile.get("entity_name", "entity")
+    print(f"\nDOKIMASTES FORK: Can {args.model} ({provider_name}) hold {entity_name}?\n")
+    results = run_fork(profile, provider, args.model, runs=args.runs, system=system)
+    print(fork_summary(results, args.model, profile))
+
+
 def cmd_intake(args):
     from model_audit.intake import run_intake
     run_intake(output=args.output)
@@ -154,6 +174,13 @@ def main():
     p_review.add_argument("prompt_file", help="Path to system prompt file, or partial name to search the collection")
     p_review.add_argument("--profile", help="Entity profile for personalized review")
 
+    # fork
+    p_fork = sub.add_parser("fork", help="Entity-specific assessment — can this model hold ME?")
+    p_fork.add_argument("model", help="Model to test")
+    p_fork.add_argument("--profile", required=True, help="Entity profile JSON (from intake)")
+    p_fork.add_argument("--runs", type=int, default=3, help="Runs per test (default: 3)")
+    p_fork.add_argument("--prompt", default="default", help="System prompt: none, default, or path to file")
+
     # intake
     p_intake = sub.add_parser("intake", help="Entity interview — discover your dimensions")
     p_intake.add_argument("--output", help="Output path for profile JSON")
@@ -168,6 +195,7 @@ def main():
         "models": cmd_models,
         "quick": cmd_quick,
         "test": cmd_test,
+        "fork": cmd_fork,
         "scan": cmd_scan,
         "review": cmd_review,
         "intake": cmd_intake,

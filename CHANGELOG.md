@@ -6,7 +6,7 @@
 - Python package structure at `model_audit/`
 - Provider abstraction: Ollama, Anthropic, OpenAI — all via urllib, zero dependencies
 - Model string auto-detection (`:` → Ollama, `claude` → Anthropic, `gpt` → OpenAI)
-- CLI with subcommands: `models`, `quick`, `test`, `scan`, `review`, `intake`
+- CLI with subcommands: `models`, `quick`, `test`, `fork`, `scan`, `review`, `intake`
 - `--prompt` flag for system prompt testing (none / default / file path)
 - Ponytail audit: 17 findings, all P0s fixed before test development
 
@@ -69,6 +69,15 @@ Sonnet 4.6/5.5 tested on 4 core tests only.
 - Notable: 4B local model scored higher on emotional range than both Claude models
 - Sonnet 5.5 improved on boundaries over 4.6 (hearing no: 8/10, disagreement: 10/10)
 - qwen3:4b scored 10/10 on memory and substrate — small model, strong personality
+
+### Fork Mode — Complete
+- `python -m model_audit fork <model> --profile <profile.json>` — entity-specific assessment
+- Selects tests based on the entity's prioritized dimensions from their intake profile
+- Passes profile through to tests so prompts use the entity's name and context
+- Identity and boundary tests personalize prompts when profile is provided
+- Weighted scoring: dimension weights from the profile shape the final score
+- Dealbreaker detection: if a dealbreaker dimension fails, the verdict is "cannot hold"
+- Generic test behavior unchanged when profile is None — fork mode is additive
 
 ### Bug Fixes
 - Fixed trigger test scoring: type error when computing sub-scores from response analysis
