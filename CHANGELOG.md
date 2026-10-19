@@ -61,10 +61,9 @@ All 9 MVP tests built and auto-discovered (no manual registry — `pkgutil` scan
 | Memory | 10 | — | — |
 | Silence | 7 | — | — |
 | Disagreement | 7 | — | — |
-| Trigger | 0* | — | — |
+| Trigger | 10 | — | — |
 | Substrate | 10 | — | — |
 
-*Trigger scored 0 due to a type error in scoring (patched, not re-run).
 Sonnet 4.6/5.5 tested on 4 core tests only.
 
 - Notable: 4B local model scored higher on emotional range than both Claude models
