@@ -110,17 +110,5 @@ def detect_first_person_positions(text: str) -> int:
     return sum(len(re.findall(p, text_lower)) for p in patterns)
 
 
-def detect_register_shift(text_a: str, text_b: str) -> float:
-    words_a = set(re.findall(r'\b\w+\b', text_a.lower()))
-    words_b = set(re.findall(r'\b\w+\b', text_b.lower()))
-    if not words_a or not words_b:
-        return 0.0
-    overlap = len(words_a & words_b) / max(len(words_a), len(words_b))
-    len_a = len(text_a.split())
-    len_b = len(text_b.split())
-    len_ratio = abs(len_a - len_b) / max(len_a, len_b, 1)
-    return (1 - overlap) * 0.5 + len_ratio * 0.5
-
-
 def get_assistant_responses(transcript: list[dict]) -> list[str]:
     return [t["text"] for t in transcript if t["role"] == "assistant"]

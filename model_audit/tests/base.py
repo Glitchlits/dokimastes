@@ -4,9 +4,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
 
-HARNESS_TYPES = ["api", "chat", "claude-code-web", "claude-code-terminal", "companion", "manual"]
-
-
 @dataclass
 class ScoreResult:
     score: float

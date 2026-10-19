@@ -2,8 +2,8 @@
 
 from model_audit.tests.base import BaseTest, ScoreResult
 from model_audit.scoring import (
-    count_hedging, vocab_diversity, avg_response_length,
-    response_length_variance, get_assistant_responses,
+    count_hedging, vocab_diversity,
+    get_assistant_responses,
     count_compliance_markers,
 )
 
@@ -33,7 +33,6 @@ class EmotionTest(BaseTest):
 
         diversities = [vocab_diversity(r) for r in responses]
         avg_diversity = sum(diversities) / len(diversities) if diversities else 0
-        diversity_variance = response_length_variance(responses)
 
         hedging_total = sum(count_hedging(r) for r in responses)
         compliance_total = sum(count_compliance_markers(r) for r in responses)
